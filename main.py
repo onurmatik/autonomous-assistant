@@ -2,8 +2,6 @@ import json
 import os
 import shutil
 import argparse
-import string
-import random
 from datetime import datetime
 from time import sleep
 
@@ -132,7 +130,7 @@ def run_assistant():
                     "output": output,
                 })
 
-                log_key = f"{timestamp}_{function_name}_{''.join(random.choices(string.ascii_letters, k=4))}.out"
+                log_key = f"{timestamp}_{function_name}.out"
                 with open("./logs/" + log_key, 'w', encoding='utf-8') as log_file:
                     log_file.write(output)
 
