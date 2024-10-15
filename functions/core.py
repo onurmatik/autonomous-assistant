@@ -79,8 +79,8 @@ DEFINITIONS = [
             "type": "object",
             "properties": {
                 "duration": {
-                    "type": "string",
-                    "description": "The duration to sleep."
+                    "type": "number",
+                    "description": "The duration to sleep in minutes."
                 },
             },
             "required": ["duration"]
@@ -150,7 +150,9 @@ def list_files(folder: str):
 
 def sleep(duration):
     """
-    Do nothing for the given period.
+    Do nothing for the given number of minutes.
     """
-    print(f"Sleeping for {duration} seconds")
-    _sleep(duration)
+    _sleep(duration * 60)
+    msg = f"Sleeping for {duration} minutes."
+    print(msg)
+    return msg

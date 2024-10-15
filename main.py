@@ -106,7 +106,11 @@ def run_assistant():
 
                 function_name = tool.function.name
                 arguments = json.loads(tool.function.arguments)
-                output = getattr(functions, function_name)(**arguments) or ''
+
+                try:
+                    output = getattr(functions, function_name)(**arguments) or ''
+                except AttributeError:
+                    output = f"[Error: {function_name} does not exist]"
 
                 output_bytes = output.encode('utf-8')
                 output_size = len(output_bytes)

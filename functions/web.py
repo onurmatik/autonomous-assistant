@@ -78,7 +78,10 @@ def web_search(query):
     Get Google search results for a query.
     """
     print("Searching for {}".format(query))
-    results = list(search(query, num_results=100, advanced=True))  # Convert generator to list
+    try:
+        results = list(search(query, num_results=100, advanced=True))  # Convert generator to list
+    except (requests.HTTPError, requests.ReadTimeout):
+        return "[Error: Too Many Requests]"
     retry = 1
     while not results and retry < 5:
         # May be rate limited; retry
