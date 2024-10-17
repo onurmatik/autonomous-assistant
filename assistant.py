@@ -76,14 +76,16 @@ thread = client.beta.threads.retrieve(config.THREAD_ID)
 
 def run_assistant():
     now = datetime.now()
-    timestamp = now.strftime('%Y-%m-%d %H:%M:%S.') + f"{now.microsecond // 1000:03d}"  # time with milliseconds
+    timestamp = now.strftime('%Y-%m-%d %H:%M:%S')  # time with milliseconds
 
     client.beta.threads.messages.create(
         thread_id=thread.id,
         role="user",
-        content=f"{now.strftime('%Y-%m-%d %H:%M')}: "
-                f"Considering what you know and what you have done so far, "
-                f"what would be your next move to achieve your objective?",
+        content=f"{timestamp}: "
+                f"Considering your current knowledge, actions taken so far, and the defined objective, "
+                f"**determine the next logical step and execute it autonomously.**"
+                f"If no meaningful action is needed at this moment, call `sleep()` "
+                f"and temporarily pause until further steps become necessary.",
         metadata={'timestamp': timestamp}
     )
     run = client.beta.threads.runs.create_and_poll(
@@ -104,6 +106,8 @@ def run_assistant():
 
                 function_name = tool.function.name
                 arguments = json.loads(tool.function.arguments)
+
+                print("Function call:", f"{function_name}({arguments})")
 
                 try:
                     output = getattr(functions, function_name)(**arguments) or ''
